@@ -1,14 +1,50 @@
 import React from 'react';
 import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { login, storeToken } from '../API/Cube';
+import * as SecureStore from 'expo-secure-store';
 
 class Login extends React.Component {
+
+    constructor(props){
+        super(props)
+        this.state = {
+            token: '',
+            username: ''
+        }
+        this.email = ''
+        this.password = ''
+    }
+
+    _emailInput(text){
+        this.email = text
+    }
+
+    _passwordInput(text){
+        this.password = text
+    }
+
+    _login(){
+        login(this.email, this.password)
+            .then(data => {
+                this.setState({ 
+                    token: data.access_token,
+                    username: data.user.username,
+                })
+            })
+            .then(storeToken(this.state.token, this.state.username))
+            .then(function(){
+                SecureStore.getItemAsync("username").then(token => console.log(token));
+                this.props.navigation.navigate('Home');
+            });          
+        }
+
     render() {
         return(     
             <View style={styles.container}>
                 <Text style={styles.title}>Se connecter</Text>
-                <TextInput style={styles.input} autoCompleteType="email" textContentType="emailAddress" placeholder="Email" />
-                <TextInput style={styles.input} autoCompleteType="password" secureTextEntry textContentType="password" placeholder="Password" />
-                <View style={{marginVertical: 5}}><Button title="Se Connecter" /></View>
+                <TextInput style={styles.input} onChangeText={(text) => this._emailInput(text)} autoCompleteType="email" textContentType="emailAddress" placeholder="Email" />
+                <TextInput style={styles.input} onChangeText={(text) => this._passwordInput(text)} autoCompleteType="password" secureTextEntry textContentType="password" placeholder="Password" />
+                <View style={{marginVertical: 5}}><Button onPress={() => this._login()} title="Se Connecter" /></View>
             </View>
         ) 
     }
