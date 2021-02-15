@@ -9,22 +9,14 @@ class Login extends React.Component {
         super(props)
         this.state = {
             token: '',
-            username: ''
+            username: '',
+            email: '',
+            password: '',
         }
-        this.email = ''
-        this.password = ''
     }
 
-    _emailInput(text){
-        this.email = text
-    }
-
-    _passwordInput(text){
-        this.password = text
-    }
-
-    _login(){
-        login(this.email, this.password)
+    async _login(){
+        login(this.state.email, this.state.password)
             .then(data => {
                 this.setState({ 
                     token: data.access_token,
@@ -36,14 +28,14 @@ class Login extends React.Component {
                 SecureStore.getItemAsync("username").then(token => console.log(token));
                 this.props.navigation.navigate('Home');
             });          
-        }
+    }
 
     render() {
         return(     
             <View style={styles.container}>
                 <Text style={styles.title}>Se connecter</Text>
-                <TextInput style={styles.input} onChangeText={(text) => this._emailInput(text)} autoCompleteType="email" textContentType="emailAddress" placeholder="Email" />
-                <TextInput style={styles.input} onChangeText={(text) => this._passwordInput(text)} autoCompleteType="password" secureTextEntry textContentType="password" placeholder="Password" />
+                <TextInput style={styles.input} onChangeText={(text) => this.setState({ email: text })} autoCompleteType="email" textContentType="emailAddress" placeholder="Email" />
+                <TextInput style={styles.input} onChangeText={(text) => this.setState({ password: text })} autoCompleteType="password" secureTextEntry textContentType="password" placeholder="Password" />
                 <View style={{marginVertical: 5}}><Button onPress={() => this._login()} title="Se Connecter" /></View>
             </View>
         ) 

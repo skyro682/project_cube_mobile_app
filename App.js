@@ -12,15 +12,15 @@ export default class App extends React.Component {
     }
   }
 
-  _idLogged() {
-    SecureStore.getItemAsync('username').then(this.setState({ isLogged: true }))
+  async _idLogged() {
+    await SecureStore.getItemAsync('username').then(this.setState({ isLogged: true }))
   }
 
   render() {
     if(this.state.isLogged == false){
       return (
         <Navigation />
-      ); 
+      );
     }
     else{
       return (
