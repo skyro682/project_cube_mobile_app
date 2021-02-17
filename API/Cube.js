@@ -1,6 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
 
-const API_URL = 'http://192.168.1.121/project_cube/public/api/';
+const API_URL = 'https://cube.alexismilano.fr/api/';
 
 export function getRessources() {
     const url = API_URL + 'ressource';
@@ -24,8 +24,8 @@ export async function storeToken(token, username) {
 
 export const login = (email, password) => {
     var data = {
-        email: 'test@test.fr',
-        password: '12345678'
+        email: email,
+        password: password
     };
     return fetch(
         API_URL + 'login',
@@ -44,12 +44,12 @@ export const login = (email, password) => {
 
 export const createAccount = (email, password, verif_password, first_name, last_name, username) => {
     var data = {
-        email: 'test@test.fr',
-        password: '12345678',
-        password_confirmation: '12345678',
-        username: 'skyro682',
-        first_name: 'Alexis',
-        last_name: 'Milano',
+        email: email,
+        password: password,
+        password_confirmation: verif_password,
+        username: username,
+        first_name: first_name,
+        last_name: last_name,
     };
     return fetch(
         API_URL + 'register',
